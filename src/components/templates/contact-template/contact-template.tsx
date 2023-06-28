@@ -7,6 +7,7 @@ import { ApplicationContext } from "@/context/application.provider";
 import { ContactContext } from "@/context/contact.provider";
 import ContactForm from "@/components/organisms/contact-form/contact-form";
 
+
 export default function ContactTemplate() {
   const applicationContext = useContext(ApplicationContext);
   const contactContext = useContext(ContactContext);
@@ -15,9 +16,8 @@ export default function ContactTemplate() {
     <Container>
       <HeaderTitle
         title="Contact Page"
-        subtitle="Cette page est créée avec Material UI."
-      />
-      <ContactForm />
+        subtitle="Cette page est créée avec Material UI."/>
+      <ContactForm/>
     </Container>
   );
 }

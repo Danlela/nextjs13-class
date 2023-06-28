@@ -14,5 +14,5 @@ export default function ContactPage() {
         <ContactTemplate />
       </ContactProvider>
     </>
-  );
+  ); 
 }
