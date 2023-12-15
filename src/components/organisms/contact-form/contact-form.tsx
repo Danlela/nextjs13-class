@@ -7,6 +7,8 @@ import * as yup from "yup";
 import { useContext, useEffect, useState } from "react";
 import { ApplicationContext } from "@/context/application.provider";
 import { ContactContext } from "@/context/contact.provider";
+import { GoogleReCaptcha } from "react-google-recaptcha-v3";
+import ReCaptcha from "@/components/molecules/recaptcha/recaptcha";
 
 const schema = yup
   .object({
@@ -14,6 +16,7 @@ const schema = yup
     email: yup.string().email("This is not a valid e-mail.").required(),
     subject: yup.string().required(),
     message: yup.string().required(),
+    recaptchaToken:yup.string().required(),
   })
   .required();
 
@@ -22,6 +25,7 @@ interface ContactForm {
   email: string;
   subject: string;
   message: string;
+  recaptchaToken?:string;
 }
 
 interface AlertMessage {
@@ -36,10 +40,13 @@ export default function ContactForm() {
     undefined
   );
 
+  const [refreshReCaptcha, setRefreshReCaptcha] = useState<boolean>(false) ;
+
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isValid },
   } = useForm<ContactForm>({
     defaultValues: {
@@ -73,6 +80,8 @@ export default function ContactForm() {
             message: `An error occurred while submitting your form: ${error.message}`,
           });
         });
+
+        setRefreshReCaptcha(true);
     }
   }
 
@@ -143,6 +152,12 @@ export default function ContactForm() {
             />
           </Grid>
           <Grid item sm={12}>
+            <ReCaptcha>
+              <GoogleReCaptcha 
+              onVerify={(token)=> setValue("recaptchaToken", token)}
+              refreshReCaptcha={refreshReCaptcha}
+              />
+            </ReCaptcha>
             <Button variant="contained" type="submit" disabled={!isValid}>
               Send
             </Button>
